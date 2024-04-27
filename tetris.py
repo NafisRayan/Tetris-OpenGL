@@ -1,6 +1,4 @@
-import time
 from random import choice
-
 import numpy as np
 from OpenGL.GL import *
 from OpenGL.GLU import *
@@ -635,8 +633,6 @@ def keyboard(key, _x, _y):
 
     # map action to key
     if key == b"q":
-        # Escape key to exit
-        print("Thank for playing with my life 423🙂")
         print("Your Latest Score", game.score)
         glutDestroyWindow(glutGetWindow())
         avoid_redisplay = True
@@ -669,16 +665,52 @@ def draw_grid_lines():
         for j in range(WINDOW_WIDTH - GRID_WIDTH, WINDOW_WIDTH):
             game.window[i, j] = np.array(GRID_LINE_COLOR) * 255
 
+def draw_score():
+    glColor3f(1.0, 1.0, 1.0)  # Set color to white
+    glMatrixMode(GL_PROJECTION)  # Switch to projection mode
+    glPushMatrix()  # Push the current matrix
+    glLoadIdentity()  # Load the identity matrix
+    gluOrtho2D(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT)  # Set orthographic projection
+    glMatrixMode(GL_MODELVIEW)  # Switch back to modelview mode
+    glPushMatrix()  # Push the current matrix
+    glLoadIdentity()  # Load the identity matrix
+    
+    # Position and draw the score using OpenGL primitives
+    glRasterPos2i(10, WINDOW_HEIGHT - 30)  # Set position for the score
+    # if game is over
+    if game.is_game_over:
+        score_string = f"Game Over. Your Final score: {game.score}"
+    else:
+        score_string = f"Score: {game.score}"  # Construct score string
+        
+    for character in score_string:
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ord(character))  # Draw each character of the score string
+
+    glPopMatrix()  # Restore the modelview matrix
+    glMatrixMode(GL_PROJECTION)  # Switch back to projection mode
+    glPopMatrix()  # Restore the projection matrix
+    glMatrixMode(GL_MODELVIEW)  # Switch back to modelview mode
 
 def fill_buffer():
-    # takes game.window matrix and draw in one step
-    # only this function apply changes in the screen, rest of the method only
-    # manuplate game.window matrix
+    # Takes game.window matrix and draws in one step
+    # Only this function applies changes to the screen, the rest of the methods only manipulate game.window matrix
 
     glClear(GL_COLOR_BUFFER_BIT)
     glRasterPos2f(-1, -1)
     glDrawPixels(WINDOW_WIDTH, WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, game.window)
+    draw_score()  # Draw the score on the screen
     glutSwapBuffers()
+
+
+# def fill_buffer():
+#     # takes game.window matrix and draw in one step
+#     # only this function apply changes in the screen, rest of the method only
+#     # manuplate game.window matrix
+
+#     glClear(GL_COLOR_BUFFER_BIT)
+#     glRasterPos2f(-1, -1)
+#     glDrawPixels(WINDOW_WIDTH, WINDOW_HEIGHT, GL_RGB, GL_UNSIGNED_BYTE, game.window)
+#     glutSwapBuffers()
 
 
 def display():
@@ -726,7 +758,7 @@ def main():
     # wind = glutCreateWindow(b"Tetris")
 
     # window background color (does not matter really)
-    # glClearColor(1.0, 0, 0, 1.0)
+    # glClearColor(1.0, 0, 0, 1.0)w
     # glClearColor(*WINDOW_BG, 1.0)
 
     # display maybe, god knows
