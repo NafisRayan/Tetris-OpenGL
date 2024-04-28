@@ -5,13 +5,13 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 
 ## show log
-SHOW_LOG = 0
+# SHOW_LOG = 0
 
 
-# for logging and debugging
-def log(*args):
-    if SHOW_LOG:
-        print(*args)
+# # for logging and debugging
+# def log(*args):
+#     if SHOW_LOG:
+#         print(*args)
 
 
 ## Color Constants:
@@ -50,7 +50,7 @@ GRID_OFFSET_X = WINDOW_WIDTH - GRID_WIDTH
 GRID_OFFSET_Y = 0
 
 
-log(f"GRID ROW X COL = {GRID_ROW} X {GRID_COL}")
+# log(f"GRID ROW X COL = {GRID_ROW} X {GRID_COL}")
 
 
 SHAPES = {
@@ -132,9 +132,9 @@ class TetrisGame:
         self.score = 0
 
     def generate_new_shape(self):
-        log("generating new shape")
+        # log("generating new shape")
         self.current_shape_type = choice(list(SHAPES.keys()))
-        log("🎲Generated shape:", self.current_shape_type)
+        # log("🎲Generated shape:", self.current_shape_type)
 
         self.shape_index = 0
         self.current_shape = SHAPES[self.current_shape_type][self.shape_index]
@@ -180,7 +180,7 @@ class TetrisGame:
                 x + self.current_pos[0],
                 y + self.current_pos[1],
             )
-        log(f"🖌filling {x + self.current_pos[0]} {y + self.current_pos[1]}")
+        # log(f"🖌filling {x + self.current_pos[0]} {y + self.current_pos[1]}")
 
     def update_ghost_shape(self):
         ghost_shapes = self.get_ghost_shape()
@@ -200,7 +200,7 @@ class TetrisGame:
         self.grid[x:xe, y:ye, :] = np.array(color) * 255
 
     def fill_occupied_grid(self):
-        log("() filling occupied grid")
+        # log("() filling occupied grid")
 
         for i in range(GRID_ROW):
             for j in range(GRID_COL):
@@ -215,7 +215,7 @@ class TetrisGame:
                         self.fill_grid(color, i, j)
 
     def change_grid_bg(self):
-        log("() changing grid bg")
+        # log("() changing grid bg")
         self.grid[:, :, :] = np.array(GRID_BG_COLOR) * 255
 
     def detect_rotation_collission(self, new_shape):
@@ -365,7 +365,7 @@ class TetrisGame:
             flag_collide = True
 
         if flag_collide:
-            log("️🟥🟥🟥🟥🟥🟥🟥Bottom collided🟥🟥🟥🟥🟥🟥")
+            # log("️Bottom collided")
             self.is_collided_bottom = True
             self.update_filled_grid(c1, c2, c3, c4)
 
@@ -373,8 +373,8 @@ class TetrisGame:
         x, y = self.current_pos
         y_left = y - 1
 
-        log("(x,y):", x, y)
-        log("(x,y_left):", x, y_left)
+        # log("(x,y):", x, y)
+        # log("(x,y_left):", x, y_left)
 
         c1 = self.current_shape[0][0] + x, self.current_shape[0][1] + y
         c2 = self.current_shape[1][0] + x, self.current_shape[1][1] + y
@@ -403,10 +403,10 @@ class TetrisGame:
         if c1[1] == 0 or c2[1] == 0 or c3[1] == 0 or c4[1] == 0:
             flag_collide = True
 
-        log("c1_left:", c1_left)
-        log("c2_left:", c2_left)
-        log("c3_left:", c3_left)
-        log("c4_left:", c4_left)
+        # log("c1_left:", c1_left)
+        # log("c2_left:", c2_left)
+        # log("c3_left:", c3_left)
+        # log("c4_left:", c4_left)
 
         if (
             self.bool_grid[c1_left]
@@ -417,7 +417,7 @@ class TetrisGame:
             flag_collide = True
 
         if flag_collide:
-            log("️🟥🟥🟥🟥🟥🟥🟥Left collided🟥🟥🟥🟥🟥🟥")
+            # log("️Left collided")
             self.is_collided_left = True
 
     def detect_right_collision(self):
@@ -464,7 +464,7 @@ class TetrisGame:
             flag_collide = True
 
         if flag_collide:
-            log("️🟥🟥🟥🟥🟥🟥🟥Right collided🟥🟥🟥🟥🟥🟥")
+            # log("️Right collided")
             self.is_collided_right = True
 
     def game_restart(self):
@@ -477,7 +477,7 @@ class TetrisGame:
 
     def detect_game_over(self, cell_one, cell_two, cell_three, cell_four):
         if self.is_game_over:
-            print("Enter (space) for restart")
+            print(" GAME OVER ")
             return
 
         if (
@@ -492,16 +492,11 @@ class TetrisGame:
                     self.filled_grid[cell[0], cell[1]] = self.current_color
                     self.bool_grid[cell] = True
 
-            print("🔥🔥🔥🔥🔥🔥🔥🔥🔥Game Over🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥")
+            print(" GAME OVER ")
             print("Your Final score:", self.score)
-            print("Enter (space) for restart")
             return
 
     def update_score(self):
-        # BUG: fix score update why only sinlgle row get's updated
-        # fxed with while
-        # check if row of bool_grid is full then increase score by grid column size
-        # update that row with row above it & check
 
         if self.is_game_over:
             return
@@ -525,7 +520,7 @@ class TetrisGame:
 
             i += 1
 
-        log("🔃 Score updating", self.score)
+        # log("🔃 Score updating", self.score)
         print("Updated Score:", self.score)
 
     def update_filled_grid(self, c1, c2, c3, c4):
@@ -563,7 +558,7 @@ class TetrisGame:
             self.place_on_grid()
             return
 
-        log("🔻 Down")
+        # log("🔻 Down")
         self.current_pos = (
             self.current_pos[0] - 1,
             self.current_pos[1],
@@ -605,11 +600,11 @@ class TetrisGame:
             self.detect_bottom_collision()
 
             if self.is_collided_bottom:
-                log("💥 collided bottom")
+                # log("💥 collided bottom")
                 self.place_on_grid()
                 return
 
-            log("🔻++ Down")
+            # log("🔻++ Down")
             self.current_pos = (
                 self.current_pos[0] - 1,
                 self.current_pos[1],
@@ -618,7 +613,7 @@ class TetrisGame:
 
 
 def keyboard(key, _x, _y):
-    log(f"(fn) keyboard interrupt key: {key.decode('utf-8')}")
+    # log(f"(fn) keyboard interrupt key: {key.decode('utf-8')}")
     # using useless mouse position
     _, _ = _x, _y
 
@@ -633,6 +628,7 @@ def keyboard(key, _x, _y):
 
     # map action to key
     if key == b"q":
+        print("Bye Bye")
         print("Your Latest Score", game.score)
         glutDestroyWindow(glutGetWindow())
         avoid_redisplay = True
@@ -653,7 +649,7 @@ def keyboard(key, _x, _y):
 
 
 def draw_grid_lines():
-    log("(fn) 🪟grid line drawing")
+    # log("(fn) 🪟grid line drawing")
 
     # draw vertical lines in grid
     for i in range(0, WINDOW_HEIGHT):
